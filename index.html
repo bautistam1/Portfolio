@@ -119,6 +119,7 @@
             box-shadow: 0 4px 15px rgba(0,0,0,0.3);
         }
         
+        /* Estilos para el placeholder si no hay imagen */
         .image-placeholder {
             width: 200px;
             height: 200px;
@@ -220,6 +221,26 @@
             border-radius: 5px;
         }
         
+        /* Estilos para manejar la imagen o placeholder */
+        .hero-image img {
+            display: block;
+        }
+        
+        /* Si no hay imagen, muestra el placeholder */
+        .hero-image:has(img[src=""]) .profile-img,
+        .hero-image:not(:has(img)) .profile-img {
+            display: none;
+        }
+        
+        .hero-image:has(img[src=""]) .image-placeholder,
+        .hero-image:not(:has(img)) .image-placeholder {
+            display: flex;
+        }
+        
+        .image-placeholder {
+            display: none;
+        }
+        
         @media (max-width: 768px) {
             .header-content {
                 flex-direction: column;
@@ -267,9 +288,25 @@
                     <p>+3 años de experiencia | Buenos Aires, Argentina</p>
                 </div>
                 <div class="hero-image">
-                     <div class="image-placeholder">
+                    <!-- 
+                    OPCIÓN 1: Si renombraste la imagen a "profile.png"
+                    -->
+                    <img src="profile.png" alt="Bautista Miguez - Desarrollador" class="profile-img">
+                    
+                    <!-- 
+                    OPCIÓN 2: Si usas el nombre original con espacios (menos recomendable)
+                    <img src="Anotación%202025-12-02%20094244.png" alt="Bautista Miguez - Desarrollador" class="profile-img">
+                    -->
+                    
+                    <!-- 
+                    OPCIÓN 3: Si la imagen está en la carpeta Images
+                    <img src="Images/profile.png" alt="Bautista Miguez - Desarrollador" class="profile-img">
+                    -->
+                    
+                    <!-- Placeholder que se mostrará solo si no hay imagen -->
+                    <div class="image-placeholder">
                         <i class="fas fa-user"></i>
-                        
+                        <span>Foto de perfil</span>
                     </div>
                 </div>
             </div>
@@ -373,5 +410,28 @@
             <p>&copy; 2025 Bautista Miguez. Todos los derechos reservados.</p>
         </div>
     </footer>
+
+    <script>
+        // Script para manejar la carga de la imagen
+        document.addEventListener('DOMContentLoaded', function() {
+            const profileImg = document.querySelector('.profile-img');
+            const placeholder = document.querySelector('.image-placeholder');
+            
+            // Verificar si la imagen se cargó correctamente
+            if (profileImg) {
+                profileImg.onerror = function() {
+                    // Si hay error al cargar la imagen, mostrar placeholder
+                    this.style.display = 'none';
+                    if (placeholder) placeholder.style.display = 'flex';
+                };
+                
+                // Verificar si la imagen tiene un src válido
+                if (!profileImg.src || profileImg.src.includes('undefined') || profileImg.src === window.location.href) {
+                    profileImg.style.display = 'none';
+                    if (placeholder) placeholder.style.display = 'flex';
+                }
+            }
+        });
+    </script>
 </body>
 </html>
